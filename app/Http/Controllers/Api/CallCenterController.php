@@ -21,10 +21,20 @@ class CallCenterController extends Controller
                 $src = $request->get('participant');
 
                 $handleService = new HandleRequestService();
-                $handleService->send($uniquId,$src,$dst);
+                $handleService->sendPopUp($uniquId,$src,$dst);
                 
                 }
-                
+
+            }catch(\Exception $ex){
+                return response()->json(['error'=>$ex->getMessage()],500);
+            }
+         }else if($request->get('event_name') == 'Cdr'){
+            try{
+                //اینجا duration مدت کل تماس هست 
+                $uniquId = $request->get('unique_id');
+                $callerId = $request->get('src');
+                $destination = $request->get('dst');
+                $buildSeconds = 
             }catch(\Exception $ex){
                 return response()->json(['error'=>$ex->getMessage()],500);
             }

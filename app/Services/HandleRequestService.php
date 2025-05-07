@@ -23,7 +23,19 @@ class HandleRequestService {
         ]);
     }
 
-    
+    public function sendCdr($uniqueId,$callerId,$destination,$duration,$buildSeconds,$callStatus,$fileUrl){
+
+        return $this->sendRequest([
+            'uniqueId' => $uniqueId,
+            'callerId' => $callerId,
+            'destination' => $destination,
+            'duration' => $duration,
+            'duration' => $duration,
+            'buildSeconds' => $buildSeconds,
+            'callStatus' => $callStatus,
+            'fileUrl' => $fileUrl,
+        ]);
+    }
 
 
     public function sendRequest(array $data){
