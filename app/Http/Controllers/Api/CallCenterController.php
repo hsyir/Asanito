@@ -34,7 +34,15 @@ class CallCenterController extends Controller
                 $uniquId = $request->get('unique_id');
                 $callerId = $request->get('src');
                 $destination = $request->get('dst');
-                $buildSeconds = 
+                $buildSeconds = $request->get('duration') * 1000;
+                $duration = $request->get('billsec') * 1000;
+                $callStatus =  $request->get('disposition');
+                $fileUrl = $request->get('record','');
+                
+                $handleService = new HandleRequestService();
+                $handleService->sendCdr($uniquId,$callerId,$destination,$buildSeconds,$duration,$callStatus,$fileUrl);
+
+                
             }catch(\Exception $ex){
                 return response()->json(['error'=>$ex->getMessage()],500);
             }
