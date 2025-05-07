@@ -14,27 +14,34 @@ class HandleRequestService {
         $this->client = new Client();
     }
 
-    public function send( $uniqueId,  $callerId,  $destination)
+    public function sendPopUp( $uniqueId,  $callerId,  $destination)
     {
-        $url = env('BASEURL')."/api/asanito/voip/call";
-        
-        try {
-            $response = $this->client->post($url, [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'API-Key' => env('APIKEY'), 
-                ],
-                'json' => [
-                    'uniqueId'    => $uniqueId,
-                    'callerId'    => $callerId,
-                    'destination' => $destination,
-                ],
-            ]);
+        return $this->sendRequest([
+            'uniqueId' => $uniqueId,
+            'callerId' => $callerId,
+            'destination' => $destination,
+        ]);
+    }
 
-            return json_decode($response->getBody(), true);
-        } catch (RequestException $e) {
-            throw new \Exception('Send Request Failed: ' . $e->getMessage());
-        }
+    
+
+
+    public function sendRequest(array $data){
+        $url = env('BASEURL') . "/api/asanito/voip/call";
+
+    try {
+        $response = $this->client->post($url, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'ApiKey' => env('APIKEY'),
+            ],
+            'json' => $data,
+        ]);
+
+        return json_decode($response->getBody(), true);
+    } catch (RequestException $e) {
+        throw new \Exception('Send Request Failed: ' . $e->getMessage());
+    }
     }
 
 
