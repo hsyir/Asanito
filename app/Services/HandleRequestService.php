@@ -30,7 +30,6 @@ class HandleRequestService {
             'callerId' => $callerId,
             'destination' => $destination,
             'duration' => $duration,
-            'duration' => $duration,
             'buildSeconds' => $buildSeconds,
             'callStatus' => $callStatus,
             'fileUrl' => $fileUrl,

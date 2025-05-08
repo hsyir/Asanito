@@ -40,7 +40,7 @@ class CallCenterController extends Controller
                 $fileUrl = $request->get('record','');
                 
                 $handleService = new HandleRequestService();
-                $handleService->sendCdr($uniquId,$callerId,$destination,$buildSeconds,$duration,$callStatus,$fileUrl);
+                $handleService->sendCdr($uniquId,$callerId,$destination,$duration,$buildSeconds,$callStatus,$fileUrl);
 
                 
             }catch(\Exception $ex){
