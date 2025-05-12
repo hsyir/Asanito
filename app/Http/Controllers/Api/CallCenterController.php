@@ -30,7 +30,7 @@ class CallCenterController extends Controller
             }
          }else if($request->get('event_name') == 'Cdr'){
             try{
-                //اینجا duration مدت کل تماس هست 
+                
                 $uniquId = $request->get('unique_id');
                 $callerId = $request->get('src');
                 $destination = $request->get('dst');
