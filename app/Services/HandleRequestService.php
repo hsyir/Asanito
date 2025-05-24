@@ -38,7 +38,12 @@ class HandleRequestService {
 
 
     public function sendRequest(array $data){
-        $url = env('BASEURL') . "/api/asanito/voip/call";
+          $url = env('BASEURL') . "/api/asanito/voip/call";
+
+    // اگر callStatus در آرایه وجود داشت، آدرس رو تغییر بده
+    if (array_key_exists('callStatus', $data)) {
+        $url = env('BASEURL') . "/api/asanito/voip/endcall";
+    }
 
     try {
         $response = $this->client->post($url, [
@@ -48,9 +53,10 @@ class HandleRequestService {
             ],
             'json' => $data,
         ]);
-
+        
         return json_decode($response->getBody(), true);
     } catch (RequestException $e) {
+        
         throw new \Exception('Send Request Failed: ' . $e->getMessage());
     }
     }
