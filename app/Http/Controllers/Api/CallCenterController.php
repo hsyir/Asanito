@@ -34,8 +34,8 @@ class CallCenterController extends Controller
                 $uniquId = $request->get('unique_id');
                 $callerId = $request->get('src');
                 $destination = $request->get('dst');
-                $buildSeconds = $request->get('duration') * 1000;
-                $duration = $request->get('billsec') * 1000;
+                $buildSeconds = $request->get('duration') ;
+                $duration = $request->get('billsec') ;
                 $callStatus =  $request->get('disposition');
                 $fileUrl = $request->get('record','');
                 
