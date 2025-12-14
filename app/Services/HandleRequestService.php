@@ -4,6 +4,7 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Log;
 
 class HandleRequestService {
 
@@ -56,7 +57,7 @@ class HandleRequestService {
         
         return json_decode($response->getBody(), true);
     } catch (RequestException $e) {
-        
+        Log::info('Send Request Failed: ' . $e->getMessage());
         throw new \Exception('Send Request Failed: ' . $e->getMessage());
     }
     }
@@ -80,7 +81,7 @@ class HandleRequestService {
                 
                 return json_decode($response->getBody(), true);
             } catch (RequestException $e) {
-                
+                 Log::info('Send Request Failed: ' . $e->getMessage());
                 throw new \Exception('Send Request Failed: ' . $e->getMessage());
             }
     }
