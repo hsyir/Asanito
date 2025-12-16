@@ -36,7 +36,7 @@ class CallCenterController extends Controller
 
             $src = $util->normalizeIranPhone($rawParti);
             $dst = $exten;
-            
+
             Cache::put($uniqueId, [
                 'state' => $state,
                 'src'   => $src,
@@ -138,6 +138,12 @@ class CallCenterController extends Controller
                     ($direction === 'in')
                 ) {
                     $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'answer');
+                     Cache::put($uniqueId, [
+                    'state' => 'InUse',
+                    'src'   => $src,
+                    'dst'   => $dst,
+                    'bef'   => "InUse",
+                ], now()->addMinutes(60));
                 }
             }
 
