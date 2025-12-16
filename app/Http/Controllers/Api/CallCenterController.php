@@ -154,7 +154,12 @@ class CallCenterController extends Controller
     if ($eventName === 'Cdr') {
 
         try {
-            $dst = $util->normalizeIranPhone($request->get('dst'));
+           $dst = $request->get('dst');
+
+            if ($dst && mb_strlen($dst) > 4) {
+                $dst = $util->normalizeIranPhone($dst);
+            }
+
 
             $handleService->sendCdr(
                 $request->get('unique_id'),
@@ -165,7 +170,7 @@ class CallCenterController extends Controller
                 $request->get('disposition'),
                 $request->get('record', '')
             );
-            
+
             return response()->json(['status' => 'ok']);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
