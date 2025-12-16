@@ -127,7 +127,7 @@ class CallCenterController extends Controller
 
             if ($cachedState === 'Ringing' && $state === 'Idle') {
 
-                if(!$cachedBef)
+               
                 $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'reject');
             }
 
