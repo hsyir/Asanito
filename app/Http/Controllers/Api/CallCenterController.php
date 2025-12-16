@@ -140,8 +140,8 @@ class CallCenterController extends Controller
                     $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'answer');
                      Cache::put($uniqueId, [
                     'state' => 'InUse',
-                    'src'   => $src,
-                    'dst'   => $dst,
+                    'src'   => $cachedSrc,
+                    'dst'   => $cachedDst,
                     'bef'   => "InUse",
                 ], now()->addMinutes(60));
                 }
@@ -166,20 +166,20 @@ class CallCenterController extends Controller
             if ($dst && mb_strlen($dst) > 4) {
                 $dst = $util->normalizeIranPhone($dst);
             }
-$uniqueId = $request->get('unique_id');
- $cachedData = Cache::get($uniqueId);
-        Log::info("cachedData");
-        Log::info($cachedData);
-        if ($cachedData) {
-            $cachedState = $cachedData['state'];
-            $cachedSrc   = $cachedData['src'];
-            $cachedDst   = $cachedData['dst'];
-            $cachedBef   = $cachedData['bef'] ?? null;
+            $uniqueId = $request->get('unique_id');
+            $cachedData = Cache::get($uniqueId);
+            Log::info("cachedData");
+            Log::info($cachedData);
+            if ($cachedData) {
+                $cachedState = $cachedData['state'];
+                $cachedSrc   = $cachedData['src'];
+                $cachedDst   = $cachedData['dst'];
+                $cachedBef   = $cachedData['bef'] ?? null;
 
-            if ($cachedState === 'Ringing' && $request->get('disposition') =='NO ANSWER') {
-                $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'reject');
+                if ($cachedState === 'Ringing' && $request->get('disposition') =='NO ANSWER') {
+                    $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'reject');
+                }
             }
-        }
             $handleService->sendCdr(
                 $request->get('unique_id'),
                 $request->get('src'),
