@@ -17,6 +17,7 @@ class HandleRequestService {
 
     public function sendPopUp( $uniqueId,  $callerId,  $destination)
     {
+        
         return $this->sendRequest([
             'uniqueId' => $uniqueId,
             'callerId' => $callerId,
@@ -48,7 +49,7 @@ class HandleRequestService {
         $url = env('BASEURL') . "/api/asanito/voip/endcall";
         
     }
-
+Log::info("request".$url);
     try {
         $response = $this->client->post($url, [
             'headers' => [
@@ -68,6 +69,7 @@ class HandleRequestService {
     public function EndCall($uniqueId,$src,$dst,$type){
         
         $url = env('BASEURL') . "/api/asanito/voip/".$type;
+        Log::info("request answer,or reject".$url);
         $data = [
             'uniqueId' => $uniqueId,
             'callerId' => $src,
