@@ -7,6 +7,7 @@ use App\Services\HandleRequestService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Services\UtilService;
+use Log;
 
 class CallCenterController extends Controller
 {
@@ -51,7 +52,7 @@ class CallCenterController extends Controller
         | OUTGOING CALL
         |--------------------------------------------------------------------------
         */
-        if ($direction === 'out') {
+        if ($direction === 'out' && $dialing && $dialing =='yes') {
 
             $dst = $util->normalizeIranPhone($rawParti);
             $src = $exten;
@@ -87,8 +88,11 @@ class CallCenterController extends Controller
                 }
 
                 // popup
-                if($dialing && $dialing =='yes')
-                $handleService->sendPopUp($uniqueId, $src, $dst);
+                if($dialing && $dialing =='yes'){
+
+                    $handleService->sendPopUp($uniqueId, $src, $dst);
+                    Log::info("dialing state inuse out ");
+                }
 
                 // // answer
                 // if($dialing && $dialing=='no'){
@@ -100,6 +104,7 @@ class CallCenterController extends Controller
                     'state' => 'Ringing',
                     'src'   => $src,
                     'dst'   => $dst,
+                    'bef'   => "InUse",
                 ], now()->addMinutes(60));
 
                 return response()->json(['status' => 'ok']);
@@ -112,18 +117,22 @@ class CallCenterController extends Controller
         |--------------------------------------------------------------------------
         */
         $cachedData = Cache::get($uniqueId);
-
+        Log::info("cachedData");
+        Log::info($cachedData);
         if ($cachedData) {
             $cachedState = $cachedData['state'];
             $cachedSrc   = $cachedData['src'];
             $cachedDst   = $cachedData['dst'];
+            $cachedBef   = $cachedData['bef'] ?? null;
 
             if ($cachedState === 'Ringing' && $state === 'Idle') {
+
+                if(!$cachedBef)
                 $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'reject');
             }
 
             if ($cachedState === 'Ringing' && $state === 'InUse') {
-
+                Log::info($cachedState . "state".$state . "direc".$direction."dial".$dialing);
                 if (
                     ($direction === 'out' && $dialing === 'no') ||
                     ($direction === 'in')
