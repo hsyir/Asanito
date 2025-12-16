@@ -22,6 +22,7 @@ class CallCenterController extends Controller
         $uniqueId  = $request->get('unique_id');
         $state     = $request->get('state');
         $direction = $request->get('direction');
+        $dialing = $request->get('dialing') ?? null;
         $exten     = $request->get('exten');
         $rawParti  = $request->get('participant');
 
@@ -86,10 +87,14 @@ class CallCenterController extends Controller
                 }
 
                 // popup
+                if($dialing && $dialing =='yes')
                 $handleService->sendPopUp($uniqueId, $src, $dst);
 
-                // answer
-                $handleService->endCall($uniqueId, $src, $dst, 'answer');
+                // // answer
+                // if($dialing && $dialing=='no'){
+
+                //     $handleService->endCall($uniqueId, $src, $dst, 'answer');
+                // }
 
                 Cache::put($uniqueId, [
                     'state' => 'Ringing',
@@ -118,8 +123,15 @@ class CallCenterController extends Controller
             }
 
             if ($cachedState === 'Ringing' && $state === 'InUse') {
-                $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'answer');
+
+                if (
+                    ($direction === 'out' && $dialing === 'no') ||
+                    ($direction === 'in')
+                ) {
+                    $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'answer');
+                }
             }
+
         }
 
         return response()->json(['status' => 'ok']);
