@@ -154,13 +154,26 @@ class CallCenterController extends Controller
     if ($eventName === 'Cdr') {
 
         try {
+            
            $dst = $request->get('dst');
 
             if ($dst && mb_strlen($dst) > 4) {
                 $dst = $util->normalizeIranPhone($dst);
             }
+$uniqueId = $request->get('unique_id');
+ $cachedData = Cache::get($uniqueId);
+        Log::info("cachedData");
+        Log::info($cachedData);
+        if ($cachedData) {
+            $cachedState = $cachedData['state'];
+            $cachedSrc   = $cachedData['src'];
+            $cachedDst   = $cachedData['dst'];
+            $cachedBef   = $cachedData['bef'] ?? null;
 
-
+            if ($cachedState === 'Ringing' && $request->get('disposition') =='NO ANSWER') {
+                $handleService->endCall($uniqueId, $cachedSrc, $cachedDst, 'reject');
+            }
+        }
             $handleService->sendCdr(
                 $request->get('unique_id'),
                 $request->get('src'),
