@@ -42,8 +42,11 @@ class HandleRequestService {
     $url = env('BASEURL') . "/api/asanito/voip/call";
 
     // اگر callStatus در آرایه وجود داشت، آدرس رو تغییر بده
+    Log::info($data);
+    Log::info("cdr");
     if (array_key_exists('callStatus', $data)) {
         $url = env('BASEURL') . "/api/asanito/voip/endcall";
+        
     }
 
     try {

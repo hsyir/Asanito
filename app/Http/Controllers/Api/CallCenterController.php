@@ -165,7 +165,7 @@ class CallCenterController extends Controller
                 $request->get('disposition'),
                 $request->get('record', '')
             );
-
+            
             return response()->json(['status' => 'ok']);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
