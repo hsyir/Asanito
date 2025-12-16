@@ -117,8 +117,7 @@ class CallCenterController extends Controller
         |--------------------------------------------------------------------------
         */
         $cachedData = Cache::get($uniqueId);
-        Log::info("cachedData");
-        Log::info($cachedData);
+
         if ($cachedData) {
             $cachedState = $cachedData['state'];
             $cachedSrc   = $cachedData['src'];
@@ -168,8 +167,7 @@ class CallCenterController extends Controller
             }
             $uniqueId = $request->get('unique_id');
             $cachedData = Cache::get($uniqueId);
-            Log::info("cachedData");
-            Log::info($cachedData);
+
             if ($cachedData) {
                 $cachedState = $cachedData['state'];
                 $cachedSrc   = $cachedData['src'];

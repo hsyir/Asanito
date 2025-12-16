@@ -69,7 +69,7 @@ Log::info("request".$url);
     public function EndCall($uniqueId,$src,$dst,$type){
         
         $url = env('BASEURL') . "/api/asanito/voip/".$type;
-        Log::info("request answer,or reject".$url);
+        Log::info("request answer,or reject".$url."callerId".$src);
         $data = [
             'uniqueId' => $uniqueId,
             'callerId' => $src,
